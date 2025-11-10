@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Диаграмма Ганта - Проект разработки ПО</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .chart {
+            font: 12px sans-serif;
+        }
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+        .bar {
+            fill: steelblue;
+        }
+        .bar-milestone {
+            fill: #d9534f;
+        }
+        .bar-phase {
+            fill: #5bc0de;
+        }
+        .bar-subphase {
+            fill: #428bca;
+        }
+        .task-label {
+            font-size: 11px;
+        }
+        .legend {
+            margin: 10px 0;
+        }
+        .legend-item {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        .legend-color {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <h1>Диаграмма Ганта - Проект разработки программного обеспечения</h1>
+    
+    <div class="legend">
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #5bc0de;"></span>
+            <span>Фаза</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #428bca;"></span>
+            <span>Подфаза</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: steelblue;"></span>
+            <span>Задача</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #d9534f;"></span>
+            <span>Веха</span>
+        </div>
+    </div>
+
+    <div id="gantt-chart"></div>
+
+    <script>
+        // Данные проекта
+        const projectData = {
+            "project_name": "Разработка программного обеспечения",
+            "project_manager": "Иванов И.Н.",
+            "start_date": "15.09.22",
+            "remarks": "Лабораторная работа No 1 Разработка структуры проекта",
+            "project_structure": {
+                "phases": [
+                    {
+                        "phase_name": "Анализ и требования к программному обеспечению",
+                        "start_date": "15.09.22",
+                        "end_date": "22.09.22",
+                        "tasks": [
+                            {
+                                "task_name": "Анализ требований",
+                                "duration": 5,
+                                "assigned_to": ["Иванов И.Н. (менеджер)"],
+                                "depends_on": [],
+                                "start_date": "15.09.22"
+                            },
+                            {
+                                "task_name": "Создание спецификации и предварительного бюджета проекта",
+                                "duration": 3,
+                                "assigned_to": ["Петров П.П. (разработчик)"],
+                                "depends_on": ["Анализ требований"],
+                                "start_date": "20.09.22"
+                            },
+                            {
+                                "task_name": "Обсуждение спецификаций программного обеспечения и бюджета с группой",
+                                "duration": 5,
+                                "assigned_to": ["Сидоров С.С. (тестировщик)"],
+                                "depends_on": ["Создание спецификации и предварительного бюджета проекта"],
+                                "start_date": "23.09.22"
+                            },
+                            {
+                                "task_name": "Доработка спецификаций программного обеспечения и бюджета с учетом замечаний",
+                                "duration": 1,
+                                "assigned_to": ["Жуков А.Б."],
+                                "depends_on": ["Обсуждение спецификаций программного обеспечения и бюджета с группой"],
+                                "start_date": "28.09.22"
+                            },
+                            {
+                                "task_name": "Разработка графика сдачи",
+                                "duration": 1,
+                                "assigned_to": ["Волков Д.Е."],
+                                "depends_on": ["Доработка спецификаций программного обеспечения и бюджета с учетом замечаний"],
+                                "start_date": "29.09.22"
+                            },
+                            {
+                                "task_name": "Закрепление требуемых ресурсов",
+                                "duration": 1,
+                                "assigned_to": ["Медведев Ф.Ж."],
+                                "depends_on": ["Разработка графика сдачи"],
+                                "start_date": "30.09.22"
+                            },
+                            {
+                                "task_name": "Разработка функциональных спецификаций",
+                                "duration": 5,
+                                "assigned_to": ["Иванов И.Н. (менеджер)", "Петров П.П. (разработчик)"],
+                                "depends_on": ["Закрепление требуемых ресурсов"],
+                                "start_date": "01.10.22"
+                            },
+                            {
+                                "task_name": "Разработка прототипа на основе функциональной спецификации",
+                                "duration": 4,
+                                "assigned_to": ["Сидоров С.С. (тестировщик)", "Жуков А.Б."],
+                                "depends_on": ["Разработка функциональных спецификаций"],
+                                "start_date": "06.10.22"
+                            },
+                            {
+                                "task_name": "Ревизия функциональных спецификаций",
+                                "duration": 2,
+                                "assigned_to": ["Козлов В.Г.", "Волков Д.Е."],
+                                "depends_on": ["Разработка функциональных спецификаций"],
+                                "start_date": "06.10.22"
+                            },
+                            {
+                                "task_name": "Доработка функциональных спецификаций с учетом замечаний",
+                                "duration": 0.5,
+                                "assigned_to": ["Медведев Ф.Ж.", "Кузнецов З.И."],
+                                "depends_on": ["Ревизия функциональных спецификаций"],
+                                "start_date": "08.10.22"
+                            },
+                            {
+                                "task_name": "Определение параметров модульной и уровневой архитектуры",
+                                "duration": 0.5,
+                                "assigned_to": ["Попов К.Л.", "Лебедев М.Н."],
+                                "depends_on": ["Разработка функциональных спецификаций", "Доработка функциональных спецификаций с учетом замечаний"],
+                                "start_date": "08.10.22"
+                            },
+                            {
+                                "task_name": "Назначение персонала для разработки",
+                                "duration": 1,
+                                "assigned_to": ["Иванов И.Н. (менеджер)", "Петров П.П. (разработчик)", "Сидоров С.С. (тестировщик)"],
+                                "depends_on": ["Определение параметров модульной и уровневой архитектуры"],
+                                "start_date": "09.10.22"
+                            }
+                        ]
+                    },
+                    {
+                        "phase_name": "Проектирование",
+                        "start_date": "23.09.22",
+                        "end_date": "06.11.22",
+                        "tasks": [
+                            {
+                                "task_name": "Разработка архитектуры программного обеспечения",
+                                "duration": 5,
+                                "assigned_to": ["Попов К.Л.", "Лебедев М.Н.", "Козлов В.Г."],
+                                "depends_on": ["Доработка функциональных спецификаций с учетом замечаний"],
+                                "start_date": "09.10.22"
+                            },
+                            {
+                                "task_name": "Разработка схемы базы данных",
+                                "duration": 4,
+                                "assigned_to": ["Волков Д.Е.", "Медведев Ф.Ж.", "Кузнецов З.И."],
+                                "depends_on": ["Разработка архитектуры программного обеспечения"],
+                                "start_date": "14.10.22"
+                            },
+                            {
+                                "task_name": "Разработка пользовательского интерфейса",
+                                "duration": 6,
+                                "assigned_to": ["Жуков А.Б.", "Петров П.П. (разработчик)", "Сидоров С.С. (тестировщик)"],
+                                "depends_on": ["Разработка архитектуры программного обеспечения"],
+                                "start_date": "14.10.22"
+                            },
+                            {
+                                "task_name": "Ревизия архитектуры программного обеспечения",
+                                "duration": 2,
+                                "assigned_to": ["Иванов И.Н. (менеджер)", "Козлов В.Г.", "Попов К.Л."],
+                                "depends_on": ["Разработка архитектуры программного обеспечения"],
+                                "start_date": "14.10.22"
+                            },
+                            {
+                                "task_name": "Доработка архитектуры программного обеспечения с учетом замечаний",
+                                "duration": 1,
+                                "assigned_to": ["Лебедев М.Н.", "Волков Д.Е.", "Медведев Ф.Ж."],
+                                "depends_on": ["Ревизия архитектуры программного обеспечения"],
+                                "start_date": "16.10.22"
+                            }
+                        ]
+                    },
+                    {
+                        "phase_name": "Разработка",
+                        "start_date": "07.1.22",
+                        "end_date": "15.12.22",
+                        "tasks": [
+                            {
+                                "task_name": "Разработка кода",
+                                "duration": 15,
+                                "assigned_to": ["Петров П.П. (разработчик)", "Жуков А.Б.", "Козлов В.Г."],
+                                "depends_on": ["Доработка архитектуры программного обеспечения с учетом замечаний"],
+                                "start_date": "17.10.22"
+                            },
+                            {
+                                "task_name": "Разработка модуля аутентификации",
+                                "duration": 4,
+                                "assigned_to": ["Петров П.П. (разработчик)", "Козлов В.Г.", "Жуков А.Б."],
+                                "depends_on": ["Разработка кода"],
+                                "start_date": "01.11.22"
+                            },
+                            {
+                                "task_name": "Разработка модуля обработки данных",
+                                "duration": 6,
+                                "assigned_to": ["Лебедев М.Н.", "Попов К.Л.", "Кузнецов З.И."],
+                                "depends_on": ["Разработка кода"],
+                                "start_date": "01.11.22"
+                            },
+                            {
+                                "task_name": "Разработка модуля пользовательского интерфейса",
+                                "duration": 5,
+                                "assigned_to": ["Волков Д.Е.", "Медведев Ф.Ж.", "Петров П.П. (разработчик)"],
+                                "depends_on": ["Разработка кода"],
+                                "start_date": "01.11.22"
+                            },
+                            {
+                                "task_name": "Интеграция модулей",
+                                "duration": 3,
+                                "assigned_to": ["Козлов В.Г.", "Волков Д.Е.", "Лебедев М.Н."],
+                                "depends_on": ["Разработка модуля аутентификации", "Разработка модуля обработки данных", "Разработка модуля пользовательского интерфейса"],
+                                "start_date": "06.11.22"
+                            },
+                            {
+                                "task_name": "Тестирование компонентов",
+                                "duration": 4,
+                                "assigned_to": ["Сидоров С.С. (тестировщик)", "Кузнецов З.И.", "Медведев Ф.Ж."],
+                                "depends_on": ["Интеграция модулей"],
+                                "start_date": "09.11.22"
+                            },
+                            {
+                                "task_name": "Отладка и исправление ошибок",
+                                "duration": 3,
+                                "assigned_to": ["Петров П.П. (разработчик)", "Жуков А.Б.", "Козлов В.Г."],
+                                "depends_on": ["Тестирование компонентов"],
+                                "start_date": "13.11.22"
+                            }
+                        ]
+                    },
+                    {
+                        "phase_name": "Тестирование",
+                        "start_date": "16.12.22",
+                        "end_date": "23.12.22",
+                        "subphases": [
+                            {
+                                "subphase_name": "Тестирование модулей",
+                                "tasks": [
+                                    {
+                                        "task_name": "Тестирование модулей компонента в соответствии со спефикацией продукта",
+                                        "duration": 2,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)", "Волков Д.Е.", "Медведев Ф.Ж."],
+                                        "depends_on": ["Отладка и исправление ошибок"],
+                                        "start_date": "16.12.22"
+                                    },
+                                    {
+                                        "task_name": "Выявление недостатков в спецификациях продукта",
+                                        "duration": 3,
+                                        "assigned_to": ["Кузнецов З.И.", "Попов К.Л.", "Лебедев М.Н."],
+                                        "depends_on": ["Тестирование модулей компонента в соответствии со спефикацией продукта"],
+                                        "start_date": "18.12.22"
+                                    },
+                                    {
+                                        "task_name": "Изменение кода",
+                                        "duration": 3,
+                                        "assigned_to": ["Петров П.П. (разработчик)", "Жуков А.Б.", "Козлов В.Г."],
+                                        "depends_on": ["Выявление недостатков в спецификациях продукта"],
+                                        "start_date": "21.12.22"
+                                    },
+                                    {
+                                        "task_name": "Повторное тестирование измененного кода",
+                                        "duration": 2,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)", "Волков Д.Е.", "Медведев Ф.Ж."],
+                                        "depends_on": ["Изменение кода"],
+                                        "start_date": "24.12.22"
+                                    },
+                                    {
+                                        "task_name": "Тестирование модулей завершено",
+                                        "duration": 0,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)"],
+                                        "depends_on": ["Повторное тестирование измененного кода"],
+                                        "start_date": "26.12.22"
+                                    },
+                                    {
+                                        "task_name": "Создание отчета о тестировании модулей",
+                                        "duration": 1,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)", "Волков Д.Е."],
+                                        "depends_on": ["Тестирование модулей завершено"],
+                                        "start_date": "26.12.22"
+                                    },
+                                    {
+                                        "task_name": "Анализ покрытия тестами",
+                                        "duration": 1,
+                                        "assigned_to": ["Кузнецов З.И.", "Медведев Ф.Ж."],
+                                        "depends_on": ["Тестирование модулей завершено"],
+                                        "start_date": "26.12.22"
+                                    },
+                                    {
+                                        "task_name": "Оптимизация тестов модулей",
+                                        "duration": 2,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)", "Кузнецов З.И."],
+                                        "depends_on": ["Анализ покрытия тестами"],
+                                        "start_date": "27.12.22"
+                                    }
+                                ]
+                            },
+                            {
+                                "subphase_name": "Тестирование интеграции",
+                                "tasks": [
+                                    {
+                                        "task_name": "Тестирование интеграции модулей",
+                                        "duration": 5,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)", "Кузнецов З.И.", "Попов К.Л."],
+                                        "depends_on": ["Тестирование модулей завершено"],
+                                        "start_date": "26.12.22"
+                                    },
+                                    {
+                                        "task_name": "Выявление недостатков в спецификациях",
+                                        "duration": 2,
+                                        "assigned_to": ["Иванов И.Н. (менеджер)", "Лебедев М.Н.", "Жуков А.Б."],
+                                        "depends_on": ["Тестирование интеграции модулей"],
+                                        "start_date": "31.12.22"
+                                    },
+                                    {
+                                        "task_name": "Изменение кода",
+                                        "duration": 3,
+                                        "assigned_to": ["Петров П.П. (разработчик)", "Козлов В.Г.", "Волков Д.Е."],
+                                        "depends_on": ["Выявление недостатков в спецификациях"],
+                                        "start_date": "02.01.23"
+                                    },
+                                    {
+                                        "task_name": "Повторное тестирование измененного кода",
+                                        "duration": 2,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)", "Медведев Ф.Ж.", "Кузнецов З.И."],
+                                        "depends_on": ["Изменение кода"],
+                                        "start_date": "05.01.23"
+                                    },
+                                    {
+                                        "task_name": "Тестирование интеграции завершено",
+                                        "duration": 0,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)"],
+                                        "depends_on": ["Повторное тестирование измененного кода"],
+                                        "start_date": "07.01.23"
+                                    },
+                                    {
+                                        "task_name": "Создание отчета о тестировании интеграции",
+                                        "duration": 1,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)", "Попов К.Л."],
+                                        "depends_on": ["Тестирование интеграции завершено"],
+                                        "start_date": "07.01.23"
+                                    },
+                                    {
+                                        "task_name": "Тестирование производительности",
+                                        "duration": 3,
+                                        "assigned_to": ["Лебедев М.Н.", "Волков Д.Е.", "Кузнецов З.И."],
+                                        "depends_on": ["Тестирование интеграции завершено"],
+                                        "start_date": "07.01.23"
+                                    },
+                                    {
+                                        "task_name": "Тестирование безопасности",
+                                        "duration": 2,
+                                        "assigned_to": ["Жуков А.Б.", "Козлов В.Г.", "Медведев Ф.Ж."],
+                                        "depends_on": ["Тестирование интеграции завершено"],
+                                        "start_date": "07.01.23"
+                                    },
+                                    {
+                                        "task_name": "Финальное тестирование системы",
+                                        "duration": 2,
+                                        "assigned_to": ["Сидоров С.С. (тестировщик)", "Иванов И.Н. (менеджер)", "Петров П.П. (разработчик)"],
+                                        "depends_on": ["Тестирование производительности", "Тестирование безопасности", "Создание отчета о тестировании интеграции", "Финальное тестирование системы"],
+                                        "start_date": "10.01.23"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "phase_name": "Документация",
+                        "start_date": "24.12.22",
+                        "end_date": "31.12.22",
+                        "tasks": [
+                            {
+                                "task_name": "Разработка справки",
+                                "duration": 21,
+                                "assigned_to": ["Иванов И.Н. (менеджер)", "Петров П.П. (разработчик)", "Сидоров С.С. (тестировщик)"],
+                                "depends_on": ["Финальное тестирование системы"],
+                                "start_date": "12.01.23"
+                            },
+                            {
+                                "task_name": "Разработка руководства пользователя",
+                                "duration": 21,
+                                "assigned_to": ["Лебедев М.Н.", "Иванов И.Н. (менеджер)", "Петров П.П. (разработчик)"],
+                                "depends_on": ["Разработка справки"],
+                                "start_date": "02.02.23"
+                            },
+                            {
+                                "task_name": "Разработка технической документации",
+                                "duration": 14,
+                                "assigned_to": ["Козлов В.Г.", "Волков Д.Е.", "Кузнецов З.И."],
+                                "depends_on": ["Разработка справки"],
+                                "start_date": "02.02.23"
+                            },
+                            {
+                                "task_name": "Разработка документации для администраторов",
+                                "duration": 10,
+                                "assigned_to": ["Медведев Ф.Ж.", "Жуков А.Б.", "Попов К.Л."],
+                                "depends_on": ["Разработка технической документации"],
+                                "start_date": "16.02.23"
+                            },
+                            {
+                                "task_name": "Ревизия справки",
+                                "duration": 3,
+                                "assigned_to": ["Жуков А.Б.", "Козлов В.Г.", "Волков Д.Е."],
+                                "depends_on": ["Разработка справки"],
+                                "start_date": "02.02.23"
+                            },
+                            {
+                                "task_name": "Ревизия руководства пользователя",
+                                "duration": 3,
+                                "assigned_to": ["Сидоров С.С. (тестировщик)", "Кузнецов З.И.", "Медведев Ф.Ж."],
+                                "depends_on": ["Разработка руководства пользователя"],
+                                "start_date": "23.02.23"
+                            },
+                            {
+                                "task_name": "Ревизия технической документации",
+                                "duration": 2,
+                                "assigned_to": ["Попов К.Л.", "Лебедев М.Н.", "Козлов В.Г."],
+                                "depends_on": ["Разработка технической документации"],
+                                "start_date": "16.02.23"
+                            },
+                            {
+                                "task_name": "Доработка справки с учетом замечаний",
+                                "duration": 2,
+                                "assigned_to": ["Медведев Ф.Ж.", "Кузнецов З.И.", "Попов К.Л."],
+                                "depends_on": ["Ревизия справки"],
+                                "start_date": "05.02.23"
+                            },
+                            {
+                                "task_name": "Доработка руководства пользователя с учетом замечаний",
+                                "duration": 2,
+                                "assigned_to": ["Волков Д.Е.", "Медведев Ф.Ж.", "Кузнецов З.И."],
+                                "depends_on": ["Ревизия руководства пользователя"],
+                                "start_date": "26.02.23"
+                            },
+                            {
+                                "task_name": "Доработка технической документации с учетом замечаний",
+                                "duration": 2,
+                                "assigned_to": ["Козлов В.Г.", "Волков Д.Е.", "Лебедев М.Н."],
+                                "depends_on": ["Ревизия технической документации"],
+                                "start_date": "18.02.23"
+                            },
+                            {
+                                "task_name": "Ревизия всей документации для пользователей",
+                                "duration": 2,
+                                "assigned_to": ["Сидоров С.С. (тестировщик)", "Жуков А.Б.", "Козлов В.Г."],
+                                "depends_on": ["Разработка руководства пользователя", "Доработка справки с учетом замечаний", "Доработка руководства пользователя с учетом замечаний"],
+                                "start_date": "26.02.23"
+                            },
+                            {
+                                "task_name": "Доработка документации для пользователей с учетом замечаний",
+                                "duration": 2,
+                                "assigned_to": ["Волков Д.Е.", "Медведев Ф.Ж.", "Кузнецов З.И."],
+                                "depends_on": ["Ревизия всей документации для пользователей"],
+                                "start_date": "28.02.23"
+                            },
+                            {
+                                "task_name": "Подготовка документации к выпуску",
+                                "duration": 1,
+                                "assigned_to": ["Иванов И.Н. (менеджер)", "Жуков А.Б.", "Волков Д.Е."],
+                                "depends_on": ["Доработка документации для пользователей с учетом замечаний", "Доработка технической документации с учетом замечаний"],
+                                "start_date": "02.03.23"
+                            }
+                        ]
+                    }
+                ],
+                "milestones": [
+                    {
+                        "milestone": "Анализ завершен",
+                        "date": "22.09.22",
+                        "duration": 0,
+                        "start_date": "22.09.22"
+                    },
+                    {
+                        "milestone": "Проектирование завершено",
+                        "date": "06.11.22",
+                        "duration": 0,
+                        "depends_on": ["Доработка архитектуры программного обеспечения с учетом замечаний"],
+                        "start_date": "17.10.22"
+                    },
+                    {
+                        "milestone": "Разработка завершена",
+                        "date": "15.12.22",
+                        "duration": 0,
+                        "depends_on": ["Отладка и исправление ошибок"],
+                        "start_date": "16.11.22"
+                    },
+                    {
+                        "milestone": "Тестирование завершено",
+                        "date": "23.12.22",
+                        "duration": 0,
+                        "depends_on": ["Финальное тестирование системы"],
+                        "start_date": "12.01.23"
+                    },
+                    {
+                        "milestone": "Документация завершена",
+                        "date": "31.12.22",
+                        "duration": 0,
+                        "depends_on": ["Подготовка документации к выпуску"],
+                        "start_date": "03.03.23"
+                    },
+                    {
+                        "milestone": "Разработка программного обеспечения завершена",
+                        "date": "31.12.22",
+                        "duration": 0,
+                        "depends_on": ["Подготовка документации к выпуску"],
+                        "start_date": "03.03.23"
+                    }
+                ]
+            }
+        };
+
+        // Преобразуем даты в объекты Date
+        function parseDate(dateStr) {
+            // Преобразуем строку даты в формат, подходящий для Date.parse()
+            const [day, month, year] = dateStr.split('.');
+            const fullYear = year.length === 2 ? '20' + year : year;
+            return new Date(`${fullYear}-${month}-${day}`);
+        }
+
+        // Функция для вычисления даты начала задачи на основе зависимостей
+        function calculateTaskDates(tasks) {
+            const taskMap = new Map();
+            
+            // Сначала добавим все задачи в мап с базовыми датами
+            for (const task of tasks) {
+                taskMap.set(task.task_name, {
+                    ...task,
+                    start_date_obj: parseDate(task.start_date),
+                    end_date_obj: null
+                });
+            }
+            
+            // Вычислим даты окончания для каждой задачи
+            for (const task of tasks) {
+                const taskObj = taskMap.get(task.task_name);
+                taskObj.end_date_obj = new Date(taskObj.start_date_obj);
+                taskObj.end_date_obj.setDate(taskObj.end_date_obj.getDate() + task.duration);
+            }
+            
+            return Array.from(taskMap.values());
+        }
+
+        // Подготовим данные для диаграммы
+        const ganttData = [];
+        
+        // Добавим фазы
+        for (const phase of projectData.project_structure.phases) {
+            // Добавим фазу как задачу
+            const phaseStart = parseDate(phase.start_date);
+            const phaseEnd = parseDate(phase.end_date);
+            
+            ganttData.push({
+                name: phase.phase_name,
+                start_date: phaseStart,
+                end_date: phaseEnd,
+                type: 'phase',
+                duration: (phaseEnd - phaseStart) / (1000 * 60 * 60 * 24)
+            });
+            
+            // Добавим задачи фазы
+            if (phase.tasks) {
+                const calculatedTasks = calculateTaskDates(phase.tasks);
+                for (const task of calculatedTasks) {
+                    ganttData.push({
+                        name: task.task_name,
+                        start_date: task.start_date_obj,
+                        end_date: task.end_date_obj,
+                        type: 'task',
+                        duration: task.duration,
+                        assigned_to: task.assigned_to
+                    });
+                }
+            }
+            
+            // Добавим подфазы если они есть
+            if (phase.subphases) {
+                for (const subphase of phase.subphases) {
+                    // Добавим подфазу
+                    ganttData.push({
+                        name: subphase.subphase_name,
+                        start_date: parseDate(phase.start_date),
+                        end_date: parseDate(phase.end_date),
+                        type: 'subphase',
+                        duration: (parseDate(phase.end_date) - parseDate(phase.start_date)) / (1000 * 60 * 24)
+                    });
+                    
+                    // Добавим задачи подфазы
+                    if (subphase.tasks) {
+                        const calculatedTasks = calculateTaskDates(subphase.tasks);
+                        for (const task of calculatedTasks) {
+                            ganttData.push({
+                                name: task.task_name,
+                                start_date: task.start_date_obj,
+                                end_date: task.end_date_obj,
+                                type: 'task',
+                                duration: task.duration,
+                                assigned_to: task.assigned_to
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Добавим вехи
+        for (const milestone of projectData.project_structure.milestones) {
+            const milestoneDate = parseDate(milestone.start_date);
+            ganttData.push({
+                name: milestone.milestone,
+                start_date: milestoneDate,
+                end_date: new Date(milestoneDate.getTime() + 24*60*60*1000), // Продолжительность 1 день для визуализации
+                type: 'milestone',
+                duration: 0
+            });
+        }
+
+        // Настройка размеров диаграммы
+        const margin = {top: 20, right: 30, bottom: 100, left: 200};
+        const width = 1200 - margin.left - margin.right;
+        const height = Math.max(600, ganttData.length * 30) - margin.top - margin.bottom;
+
+        // Определение временной шкалы
+        const minDate = d3.min(ganttData, d => d.start_date);
+        const maxDate = d3.max(ganttData, d => d.end_date);
+        
+        // Добавим запас времени
+        const timeBuffer = (maxDate - minDate) * 0.05; // 5% запаса
+        const xScale = d3.scaleTime()
+            .domain([new Date(minDate - timeBuffer), new Date(maxDate + timeBuffer)])
+            .range([0, width]);
+
+        // Шкала по оси Y
+        const yScale = d3.scaleBand()
+            .domain(ganttData.map((d, i) => i))
+            .rangeRound([0, height])
+            .padding(0.1);
+
+        // Создание SVG
+        const svg = d3.select("#gantt-chart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom);
+
+        const g = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Добавление осей
+        const xAxis = d3.axisBottom(xScale)
+            .tickFormat(d3.timeFormat("%d.%m.%y"));
+
+        const yAxis = d3.axisLeft(yScale)
+            .tickFormat((d, i) => ganttData[i].name);
+
+        g.append("g")
+            .attr("class", "x axis")
+            .attr("transform", `translate(0,${height})`)
+            .call(xAxis);
+
+        g.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+
+        // Добавление задач на диаграмму
+        g.selectAll(".bar")
+            .data(ganttData)
+            .enter()
+            .append("rect")
+            .attr("class", d => {
+                if (d.type === 'milestone') return "bar-milestone";
+                if (d.type === 'phase') return "bar-phase";
+                if (d.type === 'subphase') return "bar-subphase";
+                return "bar";
+            })
+            .attr("x", d => xScale(d.start_date))
+            .attr("y", (d, i) => yScale(i))
+            .attr("width", d => {
+                if (d.type === 'milestone') {
+                    return 3; // Узкая полоса для вехи
+                }
+                return Math.max(1, xScale(d.end_date) - xScale(d.start_date));
+            })
+            .attr("height", yScale.bandwidth())
+            .on("mouseover", function(event, d) {
+                // Показать информацию о задаче
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("position", "absolute")
+                    .style("background-color", "white")
+                    .style("border", "1px solid #ccc")
+                    .style("padding", "8px")
+                    .style("border-radius", "4px")
+                    .style("font-size", "12px")
+                    .style("box-shadow", "0 2px 4px rgba(0,0,0,0.2)")
+                    .style("pointer-events", "none")
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px")
+                    .html(`
+                        <strong>${d.name}</strong><br>
+                        Тип: ${d.type}<br>
+                        Начало: ${d.start_date.toLocaleDateString('ru-RU')}<br>
+                        Окончание: ${d.end_date.toLocaleDateString('ru-RU')}<br>
+                        Длительность: ${d.duration} дней<br>
+                        ${d.assigned_to ? 'Назначено: ' + d.assigned_to.join(', ') : ''}
+                    `);
+            })
+            .on("mouseout", function() {
+                // Удалить тултип
+                d3.selectAll(".tooltip").remove();
+            });
+
+        // Поворот подписей по оси X для лучшего отображения
+        svg.selectAll(".x.axis .tick text")
+            .attr("transform", "rotate(-45)")
+            .attr("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em");
+    </script>
+</body>
+</html>

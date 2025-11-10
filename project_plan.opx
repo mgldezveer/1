@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="urn:opf:project:1.0" name="Разработка программного обеспечения" project_manager="Иванов И.Н." start_date="2022-09-15" remarks="Лабораторная работа No 1 Разработка структуры проекта">
+  <phases>
+    <phase name="Анализ и требования к программному обеспечению" start_date="2022-09-15" end_date="2022-09-22">
+      <tasks>
+        <task name="Разработка функциональных спецификаций" duration="5" assigned_to="Иванов И.Н. (менеджер), Петров П.П. (разработчик)" depends_on="">
+          <dependencies />
+        </task>
+        <task name="Разработка прототипа на основе функциональной спецификации" duration="4" assigned_to="Сидоров С.С. (тестировщик), Жуков А.Б." depends_on="Разработка функциональных спецификаций">
+          <dependencies>
+            <dependency task="Разработка функциональных спецификаций" />
+          </dependencies>
+        </task>
+        <task name="Ревизия функциональных спецификаций" duration="2" assigned_to="Козлов В.Г., Волков Д.Е." depends_on="Разработка функциональных спецификаций">
+          <dependencies>
+            <dependency task="Разработка функциональных спецификаций" />
+          </dependencies>
+        </task>
+        <task name="Доработка функциональных спецификаций с учетом замечаний" duration="0.5" assigned_to="Медведев Ф.Ж., Кузнецов З.И." depends_on="Ревизия функциональных спецификаций">
+          <dependencies>
+            <dependency task="Ревизия функциональных спецификаций" />
+          </dependencies>
+        </task>
+        <task name="Определение параметров модульной и уровневой архитектуры" duration="0.5" assigned_to="Попов К.Л., Лебедев М.Н." depends_on="Разработка функциональных спецификаций, Доработка функциональных спецификаций с учетом замечаний">
+          <dependencies>
+            <dependency task="Разработка функциональных спецификаций" />
+            <dependency task="Доработка функциональных спецификаций с учетом замечаний" />
+          </dependencies>
+        </task>
+        <task name="Назначение персонала для разработки" duration="1" assigned_to="Иванов И.Н. (менеджер), Петров П.П. (разработчик), Сидоров С.С. (тестировщик)" depends_on="Определение параметров модульной и уровневой архитектуры">
+          <dependencies>
+            <dependency task="Определение параметров модульной и уровневой архитектуры" />
+          </dependencies>
+        </task>
+      </tasks>
+    </phase>
+    <phase name="Проектирование" start_date="2022-09-23" end_date="2022-11-06">
+      <tasks>
+        <task name="Разработка функциональных спецификаций" duration="5" assigned_to="Иванов И.Н. (менеджер), Петров П.П. (разработчик)" depends_on="Разработка функциональных спецификаций">
+          <dependencies>
+            <dependency task="Разработка функциональных спецификаций" />
+          </dependencies>
+        </task>
+        <task name="Разработка прототипа на основе функциональной спецификации" duration="4" assigned_to="Сидоров С.С. (тестировщик), Жуков А.Б." depends_on="Разработка функциональных спецификаций">
+          <dependencies>
+            <dependency task="Разработка функциональных спецификаций" />
+          </dependencies>
+        </task>
+        <task name="Ревизия функциональных спецификаций" duration="2" assigned_to="Козлов В.Г., Волков Д.Е." depends_on="Разработка функциональных спецификаций">
+          <dependencies>
+            <dependency task="Разработка функциональных спецификаций" />
+          </dependencies>
+        </task>
+        <task name="Доработка функциональных спецификаций с учетом замечаний" duration="0.5" assigned_to="Медведев Ф.Ж., Кузнецов З.И." depends_on="Ревизия функциональных спецификаций">
+          <dependencies>
+            <dependency task="Ревизия функциональных спецификаций" />
+          </dependencies>
+        </task>
+      </tasks>
+    </phase>
+    <phase name="Разработка" start_date="2022-01-07" end_date="2022-12-15">
+      <tasks>
+        <task name="Определение параметров модульной и уровневой архитектуры" duration="0.5" assigned_to="Попов К.Л., Лебедев М.Н." depends_on="Доработка функциональных спецификаций с учетом замечаний">
+          <dependencies>
+            <dependency task="Доработка функциональных спецификаций с учетом замечаний" />
+          </dependencies>
+        </task>
+        <task name="Назначение персонала для разработки" duration="1" assigned_to="Иванов И.Н. (менеджер), Петров П.П. (разработчик), Сидоров С.С. (тестировщик)" depends_on="Определение параметров модульной и уровневой архитектуры">
+          <dependencies>
+            <dependency task="Определение параметров модульной и уровневой архитектуры" />
+          </dependencies>
+        </task>
+        <task name="Разработка кода" duration="15" assigned_to="Петров П.П. (разработчик), Жуков А.Б., Козлов В.Г." depends_on="Назначение персонала для разработки">
+          <dependencies>
+            <dependency task="Назначение персонала для разработки" />
+          </dependencies>
+        </task>
+      </tasks>
+    </phase>
+    <phase name="Тестирование" start_date="2022-12-16" end_date="2022-12-23">
+      <subphases>
+        <subphase name="Тестирование модулей">
+          <tasks>
+            <task name="Тестирование модулей компонента в соответствии со спефикацией продукта" duration="2" assigned_to="Сидоров С.С. (тестировщик), Волков Д.Е., Медведев Ф.Ж." depends_on="Разработка кода">
+              <dependencies>
+                <dependency task="Разработка кода" />
+              </dependencies>
+            </task>
+            <task name="Выявление недостатков в спецификациях продукта" duration="3" assigned_to="Кузнецов З.И., Попов К.Л., Лебедев М.Н." depends_on="Тестирование модулей компонента в соответствии со спефикацией продукта">
+              <dependencies>
+                <dependency task="Тестирование модулей компонента в соответствии со спефикацией продукта" />
+              </dependencies>
+            </task>
+            <task name="Изменение кода" duration="3" assigned_to="Петров П.П. (разработчик), Жуков А.Б., Козлов В.Г." depends_on="Выявление недостатков в спецификациях продукта">
+              <dependencies>
+                <dependency task="Выявление недостатков в спецификациях продукта" />
+              </dependencies>
+            </task>
+            <task name="Повторное тестирование измененного кода" duration="2" assigned_to="Сидоров С.С. (тестировщик), Волков Д.Е., Медведев Ф.Ж." depends_on="Изменение кода">
+              <dependencies>
+                <dependency task="Изменение кода" />
+              </dependencies>
+            </task>
+            <task name="Тестирование модулей завершено" duration="0" assigned_to="Сидоров С.С. (тестировщик)" depends_on="Повторное тестирование измененного кода">
+              <dependencies>
+                <dependency task="Повторное тестирование измененного кода" />
+              </dependencies>
+            </task>
+          </tasks>
+        </subphase>
+        <subphase name="Тестирование интеграции">
+          <tasks>
+            <task name="Тестирование интеграции модулей" duration="5" assigned_to="Сидоров С.С. (тестировщик), Кузнецов З.И., Попов К.Л." depends_on="Тестирование модулей завершено">
+              <dependencies>
+                <dependency task="Тестирование модулей завершено" />
+              </dependencies>
+            </task>
+            <task name="Выявление недостатков в спецификациях" duration="2" assigned_to="Иванов И.Н. (менеджер), Лебедев М.Н., Жуков А.Б." depends_on="Тестирование интеграции модулей">
+              <dependencies>
+                <dependency task="Тестирование интеграции модулей" />
+              </dependencies>
+            </task>
+            <task name="Изменение кода" duration="3" assigned_to="Петров П.П. (разработчик), Козлов В.Г., Волков Д.Е." depends_on="Выявление недостатков в спецификациях">
+              <dependencies>
+                <dependency task="Выявление недостатков в спецификациях" />
+              </dependencies>
+            </task>
+            <task name="Повторное тестирование измененного кода" duration="2" assigned_to="Сидоров С.С. (тестировщик), Медведев Ф.Ж., Кузнецов З.И." depends_on="Изменение кода">
+              <dependencies>
+                <dependency task="Изменение кода" />
+              </dependencies>
+            </task>
+            <task name="Тестирование интеграции завершено" duration="0" assigned_to="Сидоров С.С. (тестировщик)" depends_on="Повторное тестирование измененного кода">
+              <dependencies>
+                <dependency task="Повторное тестирование измененного кода" />
+              </dependencies>
+            </task>
+          </tasks>
+        </subphase>
+      </subphases>
+    </phase>
+    <phase name="Документация" start_date="2022-12-24" end_date="2022-12-31">
+      <tasks>
+        <task name="Разработка справки" duration="21" assigned_to="Иванов И.Н. (менеджер), Петров П.П. (разработчик), Сидоров С.С. (тестировщик)" depends_on="Тестирование интеграции завершено">
+          <dependencies>
+            <dependency task="Тестирование интеграции завершено" />
+          </dependencies>
+        </task>
+        <task name="Ревизия справки" duration="3" assigned_to="Жуков А.Б., Козлов В.Г., Волков Д.Е." depends_on="Разработка справки">
+          <dependencies>
+            <dependency task="Разработка справки" />
+          </dependencies>
+        </task>
+        <task name="Доработка справки с учетом замечаний" duration="2" assigned_to="Медведев Ф.Ж., Кузнецов З.И., Попов К.Л." depends_on="Ревизия справки">
+          <dependencies>
+            <dependency task="Ревизия справки" />
+          </dependencies>
+        </task>
+        <task name="Разработка руководства пользователя" duration="21" assigned_to="Лебедев М.Н., Иванов И.Н. (менеджер), Петров П.П. (разработчик)" depends_on="Разработка справки">
+          <dependencies>
+            <dependency task="Разработка справки" />
+          </dependencies>
+        </task>
+        <task name="Ревизия всей документации для пользователей" duration="2" assigned_to="Сидоров С.С. (тестировщик), Жуков А.Б., Козлов В.Г." depends_on="Разработка руководства пользователя, Доработка справки с учетом замечаний">
+          <dependencies>
+            <dependency task="Разработка руководства пользователя" />
+            <dependency task="Доработка справки с учетом замечаний" />
+          </dependencies>
+        </task>
+        <task name="Доработка документации для пользователей с учетом замечаний" duration="2" assigned_to="Волков Д.Е., Медведев Ф.Ж., Кузнецов З.И." depends_on="Ревизия всей документации для пользователей">
+          <dependencies>
+            <dependency task="Ревизия всей документации для пользователей" />
+          </dependencies>
+        </task>
+      </tasks>
+    </phase>
+  </phases>
+  <resources>
+    <team_members>
+      <member>Иванов И.Н. (менеджер)</member>
+      <member>Петров П.П. (разработчик)</member>
+      <member>Сидоров С.С. (тестировщик)</member>
+      <member>Жуков А.Б.</member>
+      <member>Козлов В.Г.</member>
+      <member>Волков Д.Е.</member>
+      <member>Медведев Ф.Ж.</member>
+      <member>Кузнецов З.И.</member>
+      <member>Попов К.Л.</member>
+      <member>Лебедев М.Н.</member>
+    </team_members>
+    <tools>
+      <tool>OpenProject</tool>
+      <tool>Git</tool>
+      <tool>Jira</tool>
+    </tools>
+  </resources>
+  <milestones>
+    <milestone name="Анализ завершен" date="2022-09-22" duration="0" />
+    <milestone name="Проектирование завершено" date="2022-11-06" duration="0" />
+    <milestone name="Разработка завершена" date="2022-12-15" duration="0" />
+    <milestone name="Тестирование завершено" date="2022-12-23" duration="0" />
+    <milestone name="Документация завершена" date="2022-12-31" duration="0" />
+    <milestone name="Разработка программного обеспечения завершена" date="2022-12-31" duration="0" />
+  </milestones>
+</project>

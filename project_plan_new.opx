@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opx:package xmlns:opx="http://www.openproject.org/OPX/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openproject.org/OPX/1.0 http://www.openproject.org/OPX/1.0/opx.xsd">
+  <opx:project name="Разработка программного обеспечения">
+    <opx:project-information>
+      <opx:project-name>Разработка программного обеспечения</opx:project-name>
+      <opx:project-description>Лабораторная работа No 1 Разработка структуры проекта</opx:project-description>
+      <opx:project-status>Planned</opx:project-status>
+      <opx:project-type>Software Development</opx:project-type>
+      <opx:manager>Иванов И.Н.</opx:manager>
+      <opx:start-date>2022-09-15</opx:start-date>
+      <opx:end-date>202-12-24</opx:end-date>
+      <opx:planned-duration>100</opx:planned-duration>
+      <opx:currency>USD</opx:currency>
+      <opx:hourly-rate>0.0</opx:hourly-rate>
+    </opx:project-information>
+    
+    <opx:calendars>
+      <opx:calendar name="24 часа" is-default="true">
+        <opx:week-days>
+          <opx:week-day day="monday" working="true">
+            <opx:shift-start>00:00</opx:shift-start>
+            <opx:shift-end>24:00</opx:shift-end>
+          </opx:week-day>
+          <opx:week-day day="tuesday" working="true">
+            <opx:shift-start>00:00</opx:shift-start>
+            <opx:shift-end>24:00</opx:shift-end>
+          </opx:week-day>
+          <opx:week-day day="wednesday" working="true">
+            <opx:shift-start>00:00</opx:shift-start>
+            <opx:shift-end>24:00</opx:shift-end>
+          </opx:week-day>
+          <opx:week-day day="thursday" working="true">
+            <opx:shift-start>00:00</opx:shift-start>
+            <opx:shift-end>24:00</opx:shift-end>
+          </opx:week-day>
+          <opx:week-day day="friday" working="true">
+            <opx:shift-start>00:00</opx:shift-start>
+            <opx:shift-end>24:00</opx:shift-end>
+          </opx:week-day>
+          <opx:week-day day="saturday" working="true">
+            <opx:shift-start>00:00</opx:shift-start>
+            <opx:shift-end>24:00</opx:shift-end>
+          </opx:week-day>
+          <opx:week-day day="sunday" working="true">
+            <opx:shift-start>00:00</opx:shift-start>
+            <opx:shift-end>24:00</opx:shift-end>
+          </opx:week-day>
+        </opx:week-days>
+      </opx:calendar>
+    </opx:calendars>
+    
+    <opx:work-packages>
+      <opx:work-package id="1" type="Task" status="New" priority="Normal" subject="Планирование проекта">
+        <opx:start-date>2022-09-15</opx:start-date>
+        <opx:due-date>2022-09-25</opx:due-date>
+        <opx:estimated-hours>40.0</opx:estimated-hours>
+        <opx:assigned-to>Иванов И.Н.</opx:assigned-to>
+      </opx:work-package>
+      
+      <opx:work-package id="2" type="Task" status="New" priority="Normal" subject="Анализ требований">
+        <opx:start-date>2022-09-25</opx:start-date>
+        <opx:due-date>2022-10-10</opx:due-date>
+        <opx:estimated-hours>60.0</opx:estimated-hours>
+        <opx:assigned-to>Иванов И.Н.</opx:assigned-to>
+      </opx:work-package>
+      
+      <opx:work-package id="3" type="Task" status="New" priority="Normal" subject="Проектирование архитектуры">
+        <opx:start-date>2022-10-10</opx:start-date>
+        <opx:due-date>2022-10-30</opx:due-date>
+        <opx:estimated-hours>80.0</opx:estimated-hours>
+        <opx:assigned-to>Иванов И.Н.</opx:assigned-to>
+      </opx:work-package>
+      
+      <opx:work-package id="4" type="Task" status="New" priority="Normal" subject="Разработка">
+        <opx:start-date>2022-10-30</opx:start-date>
+        <opx:due-date>2022-11-29</opx:due-date>
+        <opx:estimated-hours>120.0</opx:estimated-hours>
+        <opx:assigned-to>Иванов И.Н.</opx:assigned-to>
+      </opx:work-package>
+      
+      <opx:work-package id="5" type="Task" status="New" priority="Normal" subject="Тестирование">
+        <opx:start-date>2022-11-29</opx:start-date>
+        <opx:due-date>2022-12-14</opx:due-date>
+        <opx:estimated-hours>60.0</opx:estimated-hours>
+        <opx:assigned-to>Иванов И.Н.</opx:assigned-to>
+      </opx:work-package>
+      
+      <opx:work-package id="6" type="Task" status="New" priority="Normal" subject="Внедрение">
+        <opx:start-date>2022-12-14</opx:start-date>
+        <opx:due-date>2022-12-24</opx:due-date>
+        <opx:estimated-hours>40.0</opx:estimated-hours>
+        <opx:assigned-to>Иванов И.Н.</opx:assigned-to>
+      </opx:work-package>
+    </opx:work-packages>
+    
+    <opx:relations>
+      <opx:relation from-id="1" to-id="2" type="FS" lag="0"/>
+      <opx:relation from-id="2" to-id="3" type="FS" lag="0"/>
+      <opx:relation from-id="3" to-id="4" type="FS" lag="0"/>
+      <opx:relation from-id="4" to-id="5" type="FS" lag="0"/>
+      <opx:relation from-id="5" to-id="6" type="FS" lag="0"/>
+    </opx:relations>
+    
+    <opx:custom-fields>
+      <opx:custom-field id="1" name="Замечания" value="Лабораторная работа No 1 Разработка структуры проекта"/>
+    </opx:custom-fields>
+  </opx:project>
+</opx:package>
